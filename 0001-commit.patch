@@ -1,0 +1,132 @@
+From a95da376aae18b9c55c05c9d7478dcc5ff635fe0 Mon Sep 17 00:00:00 2001
+From: Sathvika <sathvikabandra11@gmail.com>
+Date: Thu, 30 May 2024 18:30:15 +0530
+Subject: [PATCH] commit
+
+---
+ multi_commit.patch | 39113 +------------------------------------------
+ 1 file changed, 220 insertions(+), 38893 deletions(-)
+
++ /**
++  * Perspective library adds load to HTMLElement prototype.
++  * This interface acts as a wrapper for Typescript compiler.
++  */
++-interface PerspectiveViewerElement {
++-  load: (table: Table) => void,
+++interface PerspectiveViewerElement extends HTMLElement {
+++  load: (table: Table) => void;
++ }
+ 
+----
+- requirements.txt | 1 +
+- 1 file changed, 1 insertion(+)
+- create mode 100644 requirements.txt
++ /**
++@@ -27,18 +27,20 @@ class Graph extends Component<IProps, {}> {
++   table: Table | undefined;
+ 
+-diff --git a/requirements.txt b/requirements.txt
+-new file mode 100644
+-index 0000000..f678e82
+---- /dev/null
+-+++ b/requirements.txt
+-@@ -0,0 +1 @@
+-+python-dateutil==2.8.2
+-\ No newline at end of file
+--- 
+-2.45.1.windows.1
++   render() {
++-    return React.createElement('perspective-viewer');
+++    return React.createElement("perspective-viewer");
++   }
+ 
++   componentDidMount() {
++     // Get element to attach the table from the DOM.
++-    const elem: PerspectiveViewerElement = document.getElementsByTagName('perspective-viewer')[0] as unknown as PerspectiveViewerElement;
+++    const elem = document.getElementsByTagName(
+++      "perspective-viewer"
+++    )[0] as unknown as PerspectiveViewerElement;
+ 
+-From 3022e1f02670f8336f457078532f98c50f77496e Mon Sep 17 00:00:00 2001
+-From: Joe Ferrer <joe@theforage.com>
+-Date: Wed, 1 Mar 2023 00:45:20 +1100
+-Subject: [PATCH 5/5] Move python files to datafeed dir
++     const schema = {
++-      stock: 'string',
++-      top_ask_price: 'float',
++-      top_bid_price: 'float',
++-      timestamp: 'date',
+++      stock: "string",
+++      top_ask_price: "float",
+++      top_bid_price: "float",
+++      timestamp: "date",
++     };
+ 
+----
+- requirements.txt => datafeed/requirements.txt | 0
+- server.py => datafeed/server3.py              | 0
+- datafeed/test.csv                             | 0
+- 3 files changed, 0 insertions(+), 0 deletions(-)
+- rename requirements.txt => datafeed/requirements.txt (100%)
+- rename server.py => datafeed/server3.py (100%)
+- create mode 100644 datafeed/test.csv
++     if (window.perspective && window.perspective.worker()) {
++@@ -48,6 +50,16 @@ class Graph extends Component<IProps, {}> {
++       // Load the `table` in the `<perspective-viewer>` DOM reference.
+ 
+-diff --git a/requirements.txt b/datafeed/requirements.txt
+-similarity index 100%
+-rename from requirements.txt
+-rename to datafeed/requirements.txt
+-diff --git a/server.py b/datafeed/server3.py
+-similarity index 100%
+-rename from server.py
+-rename to datafeed/server3.py
+-diff --git a/datafeed/test.csv b/datafeed/test.csv
+-new file mode 100644
+-index 0000000..e69de29
+--- 
++       // Add more Perspective configurations here.
+++      elem.setAttribute("view", "y_line");
+++      elem.setAttribute("column-pivots", '["stock"]');
+++      elem.setAttribute("row-pivots", '["timestamp"]');
+++      elem.setAttribute("columns", '["top_ask_price"]');
+++      elem.setAttribute("aggregates", {`
+++        "stock": "distinct count",
+++        "top_ask_price": "avg",
+++        "top_bid_price": "avg",
+++        "timestamp": "distinct count",
+++      `});
++       elem.load(this.table);
++     }
++   }
++@@ -57,15 +69,17 @@ class Graph extends Component<IProps, {}> {
++     if (this.table) {
++       // As part of the task, you need to fix the way we update the data props to
++       // avoid inserting duplicated entries into Perspective table again.
++-      this.table.update(this.props.data.map((el: any) => {
++-        // Format the data from ServerRespond to the schema
++-        return {
++-          stock: el.stock,
++-          top_ask_price: el.top_ask && el.top_ask.price || 0,
++-          top_bid_price: el.top_bid && el.top_bid.price || 0,
++-          timestamp: el.timestamp,
++-        };
++-      }));
+++      this.table.update(
+++        this.props.data.map((el: any) => {
+++          // Format the data from ServerRespond to the schema
+++          return {
+++            stock: el.stock,
+++            top_ask_price: (el.top_ask && el.top_ask.price) || 0,
+++            top_bid_price: (el.top_bid && el.top_bid.price) || 0,
+++            timestamp: el.timestamp,
+++          };
+++        })
+++      );
++     }
++   }
++ }
++--
+ 2.45.1.windows.1
+-
